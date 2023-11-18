@@ -1,0 +1,16 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": ["tsbuildinfo", "kysely", "updateable", "pascalized"],
+  "ignorePaths": [
+    "node_modules/",
+    "build/",
+    ".build/",
+    ".sst/",
+    "dist/",
+    ".husky",
+    "pnpm-lock.yaml",
+    "package.json",
+    "tsconfig.tsbuildinfo"
+  ]
+}
