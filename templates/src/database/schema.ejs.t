@@ -1,5 +1,5 @@
 ---
-to: src/database/schema.ts
+to: api/database/schema.ts
 ---
 import {
   TableName,

@@ -1,5 +1,5 @@
 ---
-to: src/database/constants.ts
+to: api/database/constants.ts
 ---
 export enum TableName {
 <% for (const table of allTables) { %><% _%>

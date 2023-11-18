@@ -1,17 +1,22 @@
 import {
-  ComparisonOperatorExpression,
-  DeleteQueryBuilder,
-  ExpressionBuilder,
-  InsertObject,
-  SelectQueryBuilder,
-  UpdateQueryBuilder,
-  UpdateResult,
-  Updateable,
+  type ComparisonOperatorExpression,
+  type DeleteQueryBuilder,
+  type ExpressionBuilder,
+  type InsertObject,
+  type SelectQueryBuilder,
+  type UpdateQueryBuilder,
+  type UpdateResult,
+  type Updateable,
 } from 'kysely';
 import { database } from '../database/connection';
-import { Database } from '../database/schema';
-import { DatabaseColumn, DatabaseTable } from '../database/types';
-import { FilterParams, PaginationParams, SearchParams, SortingParams } from '../types';
+import { type Database } from '../database/schema';
+import { type DatabaseColumn, type DatabaseTable } from '../database/types';
+import {
+  type FilterParams,
+  type PaginationParams,
+  type SearchParams,
+  type SortingParams,
+} from '../types';
 
 type SelectQuery = SelectQueryBuilder<Database, DatabaseTable, object>;
 type UpdateQuery = UpdateQueryBuilder<Database, DatabaseTable, DatabaseTable, UpdateResult>;
@@ -20,8 +25,11 @@ type InsertData = InsertObject<Database, DatabaseTable>;
 
 export class SqlService<Entity> {
   protected table: DatabaseTable;
+
   protected primaryKeyColumn: DatabaseColumn = 'id' as DatabaseColumn;
+
   protected updatedAtColumn?: DatabaseColumn;
+
   protected deletedAtColumn?: DatabaseColumn;
 
   constructor({
@@ -53,7 +61,7 @@ export class SqlService<Entity> {
   private withoutSoftDeletes = (expressionBuilder: ExpressionBuilder<Database, DatabaseTable>) =>
     expressionBuilder(this.deletedAtColumn as DatabaseColumn, 'is', null);
 
-  protected withPagination(query: SelectQuery, pagination: PaginationParams) {
+  protected static withPagination(query: SelectQuery, pagination: PaginationParams) {
     const { count, page } = pagination ?? {};
     let newQuery = query;
     if (count) {
@@ -67,9 +75,9 @@ export class SqlService<Entity> {
     return newQuery;
   }
 
-  protected withFilters(query: SelectQuery, filters: FilterParams[]) {
+  protected static withFilters(query: SelectQuery, filters: FilterParams[]) {
     let newQuery = query;
-    for (const filter of filters) {
+    filters.forEach(filter => {
       const { field, value, comparison } = filter;
 
       if (Array.isArray(value)) {
@@ -77,26 +85,26 @@ export class SqlService<Entity> {
       } else {
         newQuery = newQuery.where(field, comparison ?? '=', value);
       }
-    }
+    });
 
     return newQuery;
   }
 
-  protected withSearch(query: SelectQuery, searchParams: SearchParams) {
+  protected static withSearch(query: SelectQuery, searchParams: SearchParams) {
     const { term, fields } = searchParams;
     let newQuery = query;
-    for (const field of fields) {
+    fields.forEach(field => {
       newQuery = newQuery.where(field, 'like', `%${term}%`);
-    }
+    });
 
     return newQuery;
   }
 
-  protected withSorting(query: SelectQuery, sorting: SortingParams[]) {
+  protected static withSorting(query: SelectQuery, sorting: SortingParams[]) {
     let newQuery = query;
-    for (const sort of sorting) {
+    sorting.forEach(sort => {
       newQuery = newQuery.orderBy(sort.field, sort.order);
-    }
+    });
 
     return newQuery;
   }
@@ -129,11 +137,11 @@ export class SqlService<Entity> {
 
     const { pagination, filters, search, sorting } = args ?? {};
     if (filters) {
-      query = this.withFilters(query, filters);
+      query = SqlService.withFilters(query, filters);
     }
 
     if (search) {
-      query = this.withSearch(query, search);
+      query = SqlService.withSearch(query, search);
     }
 
     /* The query is copied here since the total records query should have
@@ -141,11 +149,11 @@ export class SqlService<Entity> {
     const queryWithFilters = query;
 
     if (sorting) {
-      query = this.withSorting(query, sorting);
+      query = SqlService.withSorting(query, sorting);
     }
 
     if (pagination) {
-      query = this.withPagination(query, pagination);
+      query = SqlService.withPagination(query, pagination);
     }
 
     const records = await query.selectAll().execute();

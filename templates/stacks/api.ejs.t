@@ -4,7 +4,7 @@ to: stacks/api.ts
 import { Api, type StackContext } from 'sst/constructs';
 import { Secrets } from './secrets';
 
-const handlersPath = 'src/handlers';
+const handlersPath = 'api/handlers';
 
 export function API({ stack }: StackContext) {
   const { DB_CONNECTION } = Secrets(stack);

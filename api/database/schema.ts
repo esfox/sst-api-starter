@@ -1,4 +1,4 @@
-import { TableName, UserField } from './constants';
+import { type TableName, type UserField } from './constants';
 
 export interface Users {
   [UserField.Id]: string;

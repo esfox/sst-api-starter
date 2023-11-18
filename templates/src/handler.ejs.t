@@ -1,5 +1,5 @@
 ---
-to: src/handlers/<%= h.inflection.dasherize(tableName) %>.ts
+to: api/handlers/<%= h.inflection.dasherize(tableName) %>.ts
 ---
 <% const dasherizedName = h.inflection.dasherize(tableName) %><% _%>
 <% const camelizedName = h.inflection.camelize(tableName, true) %><% _%>

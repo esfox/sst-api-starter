@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import middy from '@middy/core';
 import bodyParser from '@middy/http-json-body-parser';
 import { type APIGatewayProxyEventV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
@@ -49,6 +50,7 @@ export function createHandler<TBody, TQuery, THeaders, TPathParams>({
 
     const validationResult = z.object(validationSchema).safeParse(event);
     if (validationResult.success === false) {
+      // eslint-disable-next-line consistent-return
       return {
         headers: commonHeaders,
         statusCode: StatusCodes.BAD_REQUEST,

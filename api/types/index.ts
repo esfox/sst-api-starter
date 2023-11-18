@@ -1,5 +1,5 @@
-import { ComparisonOperatorExpression, OrderByDirectionExpression } from 'kysely';
-import { DatabaseColumn } from '../database/types';
+import { type ComparisonOperatorExpression, type OrderByDirectionExpression } from 'kysely';
+import { type DatabaseColumn } from '../database/types';
 
 export type PaginationParams = {
   page?: number;

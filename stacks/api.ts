@@ -1,22 +1,22 @@
 import { Api, type StackContext } from 'sst/constructs';
 import { Secrets } from './secrets';
 
-const handlersPath = 'src/handlers';
+const apiHandlersPath = 'api/handlers';
 
 export function API({ stack }: StackContext) {
   const { DB_CONNECTION } = Secrets(stack);
 
   const api = new Api(stack, 'API', {
     routes: {
-      'GET /docs': `${handlersPath}/docs.handler`,
-      'GET /swagger.json': `${handlersPath}/docs.handler`,
+      'GET /docs': `${apiHandlersPath}/docs.handler`,
+      'GET /swagger.json': `${apiHandlersPath}/docs.handler`,
 
-      'GET /users': `${handlersPath}/users.list`,
-      'GET /users/{id}': `${handlersPath}/users.get`,
-      'POST /users': `${handlersPath}/users.post`,
-      'PATCH /users/{id}': `${handlersPath}/users.patch`,
-      'DELETE /users/{id}': `${handlersPath}/users.destroy`,
-      'DELETE /users/{id}/archive': `${handlersPath}/users.archive`,
+      'GET /users': `${apiHandlersPath}/users.list`,
+      'GET /users/{id}': `${apiHandlersPath}/users.get`,
+      'POST /users': `${apiHandlersPath}/users.post`,
+      'PATCH /users/{id}': `${apiHandlersPath}/users.patch`,
+      'DELETE /users/{id}': `${apiHandlersPath}/users.destroy`,
+      'DELETE /users/{id}/archive': `${apiHandlersPath}/users.archive`,
     },
   });
 
